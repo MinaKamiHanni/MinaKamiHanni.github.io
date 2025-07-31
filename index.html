@@ -1,29 +1,458 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>创作者导航</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创作者导航页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #39c5bb 0%, #ffffff 100%);
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 25px;
+            opacity: 0.9;
+        }
+        
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 16px 25px;
+            padding-left: 60px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            color: #444;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 20px;
+        }
+        
+        /* 一级分类样式 */
+        .main-category {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .main-category-header {
+            background: linear-gradient(135deg, #ffc0cb 0%, #ffffff 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .main-category-header:hover {
+            background: linear-gradient(135deg, #ffc0cb 0%, #ffffff 100%);
+        }
+        
+        .main-category-icon {
+            font-size: 26px;
+            margin-right: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .main-category-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        /* 二级分类样式 */
+        .sub-category {
+            padding: 25px 30px;
+        }
+        
+        .sub-category-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sub-category-title i {
+            margin-right: 10px;
+            color: #4a90e2;
+        }
+        
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        /* 导航卡片样式 */
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            width: calc(25% - 20px);
+            min-width: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            border-color: #4a90e2;
+        }
+        
+        .card-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: #4a90e2;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .card-desc {
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.4;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .card {
+                width: calc(33.33% - 20px);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .card {
+                width: calc(50% - 20px);
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .card {
+                width: 100%;
+            }
+            
+            .main-category-header {
+                padding: 15px 20px;
+            }
+            
+            .sub-category {
+                padding: 15px 20px;
+            }
+        }
+        
+        /* 多语言示例样式 */
+        .language-section {
+            margin-top: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+        }
+        
+        .language-section h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-size: 26px;
+        }
+        
+        .language-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .language-box {
+            flex: 1;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+        }
+        
+        .language-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2575fc;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .language-examples p {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+        
+        .category-count {
+            background-color: #4a90e2;
+            color: white;
+            font-size: 14px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+        }
+        
+        .main-category-content {
+            display: none;
+        }
+        
+        .main-category.active .main-category-content {
+            display: block;
+        }
+        
+        .main-category.active .main-category-header {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>P主</h1>
-        <div class="category">
-            <h2>X账号</h2>
-            <ul>
-                <li><a href="https://x.com/DTM_dopamine" target="_blank">ど～ぱみん</a></li>
-                <li><a href="https://x.com/bpb_falche" target="_blank">はろける</a></li>
-                <li><a href="https://x.com/n0yn0yn0y" target="_blank">ノイ</a></li>
-                <li><a href="https://x.com/Eight0710" target="_blank">Eight</a></li>
-            </ul>
+    <header>
+        <h1>关键词搜索</h1>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="搜索关键词..." id="searchInput">
         </div>
-        <div class="category">
-            <h2>YouTube账号</h2>
-            <ul>
-                <li><a href="https://www.youtube.com/@iso_nosuke" target="_blank">isonosuke</a></li>
-            </ul>
-        </div>
-        <!-- 更多分类 -->
-    </div>
+    </header>
+    
+    <main>
+        <!-- 第一级分类 - Vocaloid P -->
+        <section class="main-category active">
+            <div class="main-category-header">
+                <div class="main-category-icon">
+                    <i class="fa-solid fa-music"></i>
+                </div>
+                <h2 class="main-category-title">Vocaloid P</h2>
+            </div>
+            
+            <div class="main-category-content">
+                <!-- Vocaloid P子分类 -->
+                <div class="sub-category">
+                    <h3 class="sub-category-title">夏山よつぎ</h3>
+                    <div class="cards-container">
+                       <a href="https://x.com/seckarium" target="_blank" class="card-link">
+                            <div class="card">
+                                <div class="card-icon">
+                                    <i class="fa-brands fa-twitter"></i>
+                                </div>
+                                <h3 class="card-title">X</h3>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.youtube.com/@seckarium" target="_blank" class="card-link">
+                            <div class="card">
+                                <div class="card-icon">
+                                   <i class="fa-brands fa-youtube"></i>
+                                </div>
+                                <h3 class="card-title">YouTube</h3>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.nicovideo.jp/user/77964079/mylist/68893474" target="_blank" class="card-link">
+                            <div class="card">
+                                <div class="card-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <h3 class="card-title">niconico</h3>
+                            </div>
+                        </a>
+                        
+                        <a href="https://space.bilibili.com/391272281?spm_id_from=333.788.upinfo.detail.click" target="_blank" class="card-link">
+                            <div class="card">
+                                <div class="card-icon">
+                                    <i class="fa-brands fa-bilibili"></i>
+                                </div>
+                                <h3 class="card-title">Bilibili</h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sub-category">
+                    <h3 class="sub-category-title">カササギ</h3>
+                    <div class="cards-container">
+                       <a href="https://x.com/katakori_itaine" target="_blank" class="card-link">
+                            <div class="card">
+                                <div class="card-icon">
+                                    <i class="fa-brands fa-twitter"></i>
+                                </div>
+                                <h3 class="card-title">X</h3>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.youtube.com/@kqdlb/featured" target="_blank" class="card-link">
+                            <div class="card">
+                                <div class="card-icon">
+                                   <i class="fa-brands fa-youtube"></i>
+                                </div>
+                                <h3 class="card-title">YouTube</h3>
+                            </div>
+                        </a>
+                        
+                        <a href="https://space.bilibili.com/3546934367226632?spm_id_from=333.788.upinfo.head.click" target="_blank" class="card-link">
+                            <div class="card">
+                                <div class="card-icon">
+                                    <i class="fa-brands fa-bilibili"></i>
+                                </div>
+                                <h3 class="card-title">Bilibili</h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 第一级分类 - illustrator -->
+        <section class="main-category">
+            <div class="main-category-header">
+                <div class="main-category-icon">
+                    <i class="fa-solid fa-palette"></i>
+                </div>
+                <h2 class="main-category-title">Illustrator</h2>
+            </div>
+            
+            <div class="main-category-content">
+                <!-- illustrator子分类 -->
+                
+            </div>
+        </section>
+        
+        
+        <!-- 多语言展示区域 -->
+        <section class="language-section">
+            <h2>多语言支持示例</h2>
+            <div class="language-content">
+                <div class="language-box">
+                    <div class="language-title">日本語サポート</div>
+                    <div class="language-examples">
+                        <p>ウェブナビゲーションは多言語を完全にサポートしています。</p>
+                        <p>日本語のサイトを素早く見つけることができます。</p>
+                        <p>すべてのコンテンツが日本語で表示可能です。</p>
+                        <p>検索機能は日本語キーワードをサポートします。</p>
+                    </div>
+                </div>
+                
+                <div class="language-box">
+                    <div class="language-title">中文支持</div>
+                    <div class="language-examples">
+                        <p>网页导航完全支持中文多语言显示。</p>
+                        <p>可以快速找到中文站点和资源。</p>
+                        <p>所有分类和标签都完美支持中文显示。</p>
+                        <p>搜索功能支持中文关键词检索。</p>
+                    </div>
+                </div>
+                
+                <div class="language-box">
+                    <div class="language-title">English Support</div>
+                    <div class="language-examples">
+                        <p>The navigation system fully supports English.</p>
+                        <p>Easily find English-language resources.</p>
+                        <p>All categories and cards display perfectly.</p>
+                        <p>Search functionality supports English keywords.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        // 简单的搜索功能
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                const cardText = card.textContent.toLowerCase();
+                if (cardText.includes(searchTerm) || searchTerm === '') {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+        
+        // 主要分类点击展开/收起
+        const mainCategoryHeaders = document.querySelectorAll('.main-category-header');
+        mainCategoryHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const category = header.parentElement;
+                category.classList.toggle('active');
+            });
+        });
+    </script>
 </body>
 </html>
